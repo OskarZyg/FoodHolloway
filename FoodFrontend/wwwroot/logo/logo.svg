@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120"
+   height="120"
+   viewBox="0 0 120 120"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   sodipodi:docname="logo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="4"
+     inkscape:cx="48.25"
+     inkscape:cy="67.625"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1">
+    <inkscape:grid
+       id="grid10"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="1"
+       spacingy="1"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14901961"
+       empspacing="5"
+       enabled="true"
+       visible="false" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#6d96e2;fill-opacity:1;stroke-width:1.91827"
+       id="rect3"
+       width="120.00269"
+       height="119.99867"
+       x="-0.002695471"
+       y="0" />
+    <g
+       id="g3"
+       transform="matrix(0.81175931,0,0,0.81175931,2.6927136,-8.954848)">
+      <ellipse
+         style="fill:#a65a27;fill-opacity:1;stroke-width:2.13486"
+         id="path1"
+         cx="-21.951807"
+         cy="60"
+         rx="21.951807"
+         ry="21.131184"
+         transform="scale(-1,1)" />
+      <rect
+         style="fill:#a65a27;fill-opacity:1;stroke-width:3.84535"
+         id="rect2"
+         width="79.60096"
+         height="42.121567"
+         x="20.19952"
+         y="38.939217" />
+      <text
+         xml:space="preserve"
+         style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:39.8407px;font-family:'Georgia Pro';-inkscape-font-specification:'Georgia Pro, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#000000;stroke-width:3.32007"
+         x="4.084106"
+         y="69.152908"
+         id="text1"
+         transform="scale(0.92774326,1.0778844)"><tspan
+           sodipodi:role="line"
+           id="tspan1"
+           x="4.084106"
+           y="69.152908"
+           style="font-style:italic;font-variant:normal;font-weight:900;font-stretch:normal;font-size:39.8406974px;font-family:'Georgia Pro';-inkscape-font-specification:'Georgia Pro, Heavy Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:3.32007">CNU</tspan></text>
+    </g>
+    <rect
+       style="fill:#a65a27;fill-opacity:1;stroke-width:0.209749"
+       id="rect7"
+       width="5.8990951"
+       height="29.184999"
+       x="114.10091"
+       y="-107.57619"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#a65a27;fill-opacity:1;stroke-width:0.165684"
+       id="rect8"
+       width="4.4406872"
+       height="24.191057"
+       x="11.431471"
+       y="-105.05936"
+       transform="rotate(90)" />
+    <rect
+       style="fill:#a65a27;fill-opacity:1;stroke-width:0.732629"
+       id="rect10"
+       width="19.870634"
+       height="105.70626"
+       x="83.115868"
+       y="14.060887" />
+  </g>
+</svg>

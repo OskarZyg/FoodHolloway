@@ -1,6 +1,6 @@
 {
-  "name": "FoodFrontend",
-  "short_name": "FoodFrontend",
+  "name": "CibusNU",
+  "short_name": "CibusNU",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
@@ -9,14 +9,9 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "logo/logo.svg",
+      "type": "image/svg",
+      "sizes": "120x120"
     }
   ]
 }

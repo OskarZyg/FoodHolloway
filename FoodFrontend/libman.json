@@ -1,0 +1,16 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "jsdelivr",
+      "library": "@picocss/pico@2.1.1",
+      "destination": "wwwroot/lib/picocss/pico"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@tabler/icons-webfont@3.35.0",
+      "destination": "wwwroot/lib/tabler/icons-webfont"
+    }
+  ]
+}

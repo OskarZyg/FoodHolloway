@@ -1,0 +1,56 @@
+@* StarRating.razor *@
+<div class="star-rating">
+    @for (int i = 1; i <= 5; i++)
+    {
+        int starNumber = i;
+        double fillPercentage = GetFillPercentage(starNumber);
+        string starId = $"star-{Guid.NewGuid()}";
+        
+        <svg class="star-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="@starId">
+                    <stop offset="@(fillPercentage)%" stop-color="#ffc107" />
+                    <stop offset="@(fillPercentage)%" stop-color="#e0e0e0" />
+                </linearGradient>
+            </defs>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" 
+                  fill="url(#@starId)" 
+                  stroke="#ffc107" 
+                  stroke-width="0.5"/>
+        </svg>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public double Rating { get; set; }
+
+    private double GetFillPercentage(int starNumber)
+    {
+        double starValue = Rating - (starNumber - 1);
+        
+        if (starValue >= 1.0)
+            return 100.0;
+        else if (starValue > 0.0)
+            return starValue * 100.0;
+        else
+            return 0.0;
+    }
+}
+
+<style>
+    .star-rating {
+        display: inline-flex;
+        gap: 4px;
+    }
+
+    .star-svg {
+        width: 24px;
+        height: 24px;
+        transition: transform 0.2s;
+    }
+
+    .star-svg:hover {
+        transform: scale(1.1);
+    }
+</style>

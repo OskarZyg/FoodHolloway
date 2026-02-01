@@ -1,0 +1,90 @@
+/* Safe Areas (for mobile clients) */
+:root {
+    --sat: env(safe-area-inset-top);
+    --sar: env(safe-area-inset-right);
+    --sab: env(safe-area-inset-bottom); /* THIS ONE GETS US THE HOME BAR HEIGHT */
+    --sal: env(safe-area-inset-left);
+}
+
+/* Page Transitions, see https://css-tricks.com/toe-dipping-into-view-transitions/ */
+@media not (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+/* Error UI */
+#blazor-error-ui {
+    backdrop-filter: blur(3px);
+    box-sizing: border-box;
+    display: none;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    margin: 0;
+    align-content: center;
+}
+
+#blazor-error-ui article {
+    margin: auto;
+}
+
+/* Loading Screen */
+.loading-progress-text::after {
+    /*noinspection CssUnresolvedCustomProperty*/
+    content: var(--blazor-load-percentage-text, "Loading");
+}
+
+/* Generics */
+/*noinspection CssOverwrittenProperties*/
+#app {
+    min-height: 100vh; /* fallback */
+    min-height: 100dvh; /* modern browsers */
+
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--sab);
+    --pico-font-family: 'Jost', serif !important;
+}
+
+#app:has(> footer.app-bar) {
+    padding-bottom: calc(4rem + var(--sab)) !important;
+}
+
+#app > header, #app > footer.app-bar {
+    overflow: visible;
+    flex-grow: 0;
+}
+
+#app > footer.app-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: var(--sab);
+    z-index: 100;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* Takes up remaining space */
+    overflow-y: auto; /* Add a scrollbar if content overflows */
+}
+
+header:not(.spaced) {
+    --pico-typography-spacing-vertical: 0;
+}
+
+h1:focus {
+    outline: none;
+}
+
+/* Table highlighting */
+table tbody tr:not(thead tr) td, table tbody tr:not(thead tr) th {
+    transition: background-color 200ms ease-in-out;
+}
+
+table:not(.nohighlight) tbody tr:not(thead tr):is(:hover, :focus, :active) td, table tbody tr:not(thead tr):is(:hover, :focus, :active) th {
+    -webkit-tap-highlight-color: var(--pico-secondary-focus);
+    background-color: var(--pico-secondary-focus);
+}

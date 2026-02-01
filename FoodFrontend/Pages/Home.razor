@@ -1,0 +1,280 @@
+﻿@page "/"
+@using System.Collections.ObjectModel
+@using Blazored.LocalStorage
+@using FoodFrontend.Code.Model
+@using FoodFrontend.Code.Services
+@using FoodFrontend.Components
+@using OpenLayers.Blazor
+@inject PoiQueryService PoiQueryService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+
+<!--
+<details>
+    <summary>Map Debug</summary>
+    <pre>Center: @_map.Center
+VisibleExtent: @_map.VisibleExtent
+Zoom: @_map.Zoom</pre>
+</details> 
+-->
+
+
+<Map @ref="_map" class="map" Style="height: 100dvh; width: 100dvw" @bind-Center="@Center" @bind-Zoom="@Zoom" @bind-Zoom:after="EnsureZoomLimits" @bind-Center:after="OnMove" MinZoom="16" MaxZoom="18" ZoomControl="false" Rotation="0" ScaleLineUnit="ScaleLineUnit.None" AutoPopup OnMarkerClick="marker => OnPopupLoad(marker.Id)">
+    <Popup>
+    @if (context is Marker marker)
+    {
+        <article id="popup">
+            <header>
+            <hgroup>
+                <strong>@marker.Text</strong>
+                @if (PopupInfo is not null)
+                {
+                    @if (PopupInfo.Cuisine is not null) {
+                        <p>@PopupInfo.Cuisine</p>
+                    }
+                }
+                else
+                {
+                    <p aria-busy="true">Cuisine</p>
+                }
+            </hgroup>
+            </header>
+                @if (PopupInfo is not null)
+                {
+                    @if (PopupInfo.StarRating is not null) {
+                        <StarRating Rating="@(PopupInfo.StarRating.Value)"/>
+                    }
+                    else
+                    {
+                        <StarRating Rating="0"/>
+                        <em>No Reviews Yet</em>
+                    }
+                    
+                    @if (PopupInfo.OpeningHours is not null)
+                    {
+                        <table>
+                            @foreach (var se in PopupInfo.OpeningHours.Split(";"))
+                            {
+                                <tr>
+                                    <th>@se.TrimStart().Split(' ')[0]</th>
+                                    <td>@se.Split(' ').Last()</td>
+                                </tr>
+                            }
+                        </table>
+                    }
+                    
+                    <ul>
+                        @if (PopupInfo.Vegan == true)
+                        {
+                            <li>Vegetarian options available</li>
+                        }
+                        @if (PopupInfo.Vegan == true)
+                        {
+                            <li>Vegan options available</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p aria-busy="true">Loading...</p>
+                }
+            <footer>
+                <div role="group">
+                    <a role="button" href="places/@marker.Id">Page</a>
+                    <a role="button" href="https://maps.google.com/?q=@marker.Coordinate.Latitude,@marker.Coordinate.Longitude" class="secondary"><Icon Name="gps"/></a>
+                </div>
+            </footer>
+        </article>
+    }
+    </Popup>
+    <Layers>
+        <Layer Url="@("https://api.mapbox.com/styles/v1/oskarzyg/cml2gzv10002t01sgculy6tlk/tiles/512/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaHc3cyIsImEiOiJjbWwyZmlvMHMwZXB1M2VzZGtndnR6NjN4In0.R84dHV2y7z7tC1BLFCS74w")"></Layer>
+    </Layers>
+</Map>
+
+<header class="overlay container">
+    <div>
+        <h1 style="font-size:3em">CibusNU</h1>
+        @if (FailureStatus)
+        {
+            <p>
+                <em class="pico-color-red-500">Offline </em>
+                @if (!Loading)
+                {
+                    <a href @onclick="@PopulateMap">reload</a>
+                }
+                else
+                {
+                    <span aria-busy="true">loading</span>
+                }
+            </p>
+        }
+        else
+        {
+            @if (Loading)
+            {
+                <p aria-busy="true">Loading</p>
+            }
+        }
+    </div>
+</header>
+
+<footer class="overlay container">
+    <div>
+        @if (Center.DistanceTo(InitialCenter) > 1) {
+            <div role="group" style="margin-bottom: 1em; --pico-font-size: 0.5em;" class="fade-up">
+                <button class="contrast" @onclick="@(() => Center = InitialCenter)"><Icon Name="navigation"/> Campus</button>
+            </div>
+        }
+
+        <div role="group" @onclick="SearchPressed">
+            <input
+                type="search"
+                name="search"
+                placeholder="Search"
+                aria-label="Search"/>
+            <button><Icon Name="search"/></button>
+        </div>
+    </div>
+</footer>
+
+
+@code {
+
+    Map _map = new();
+    
+    private const double InitialZoom = 17;
+    private static readonly Coordinate InitialCenter = new(-0.565917, 51.425869);
+
+    private double Zoom { get; set; } = InitialZoom;
+    private Coordinate Center { get; set; } = InitialCenter;
+
+    private Coordinate _lastUpdatePos = InitialCenter;
+
+    private Collection<LitePoi>? _currentPois;
+
+    private bool FailureStatus { get; set; }
+    private bool Loading { get; set; }
+    
+    private Poi? PopupInfo { get; set; }
+
+    void EnsureZoomLimits()
+    {
+        var layer = _map.LayersList[0];
+        if (Zoom >= layer.MaxZoom) Zoom = (double)layer.MaxZoom - 0.01;
+        if (Zoom <= layer.MinZoom) Zoom = (double)layer.MinZoom + 0.01;
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await PopulateMap();
+    }
+
+    private void SetPois(Collection<LitePoi>? pois)
+    {
+        if (pois != _currentPois)
+        {
+            _currentPois = pois;
+            _map.MarkersList.Clear();
+            if (pois is not null)
+            {
+                foreach (LitePoi litePoi in pois)
+                {
+                    string imagePath = "/icons/";
+                    switch (litePoi.AmenityType)
+                    {
+                        case "restaurant":
+                            imagePath += "tools-kitchen-2";
+                            break;
+                        case "pub":
+                            imagePath += "beer";
+                            break;
+                        case "fast_food":
+                            imagePath += "burger";
+                            break;
+                        case "cafe":
+                            imagePath += "coffee";
+                            break;
+                        case "bar":
+                            imagePath += "glass-cocktail";
+                            break;
+                        case "ice_cream":
+                            imagePath += "ice-cream-2";
+                            break;
+                        case "cinema":
+                            imagePath += "movie";
+                            break;
+                        case "events_venue":
+                        case "theatre":
+                            imagePath += "masks-theater";
+                            break;
+                        default:
+                            imagePath += "beer";
+                            break;
+                    }
+
+                    imagePath += ".png";
+
+                    Marker m = new Marker(litePoi.Coordinate, imagePath, 256, 256, 128, 300) // Center anchor
+                    {
+                        Id = litePoi.FoodSafetyAgencyId,
+                        Text = litePoi.Name,
+                        Type = MarkerType.MarkerCustomImage,
+                        Scale = 0.1
+                    };
+                    _map.MarkersList.Add(m);
+                }
+            }
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    async Task PopulateMap()
+    {
+        _lastUpdatePos = Center;
+        SetPois(await LocalStorage.GetItemAsync<Collection<LitePoi>>("cached-poi"));
+        Loading = true;
+        try
+        {
+            SetPois(await PoiQueryService.QueryPoi(Center));
+            await LocalStorage.SetItemAsync("cached-poi", _currentPois);
+            FailureStatus = false;
+        }
+        catch (HttpRequestException e) when (e.StatusCode is null)
+        {
+            FailureStatus = true;
+        }
+        finally
+        {
+            Loading = false;
+        }
+    }
+
+    private async Task OnMove()
+    {
+        if (Center.DistanceTo(_lastUpdatePos) > 0.5)
+        {
+            await PopulateMap();
+        }
+    }
+
+    private async Task OnPopupLoad(string fsaId)
+    {
+        if (PopupInfo is not null && PopupInfo.FoodSafetyAgencyId == fsaId)
+        {
+            return;
+        }
+
+        PopupInfo = null;
+
+        PopupInfo = await PoiQueryService.QuerySpecificPoi(fsaId);
+    }
+
+    private void SearchPressed()
+    {
+        NavigationManager.NavigateTo("search");
+    }
+
+}

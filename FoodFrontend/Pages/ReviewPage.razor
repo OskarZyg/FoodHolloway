@@ -1,0 +1,74 @@
+@page "/places/{FsaId}/review"
+@using FoodFrontend.Code.Model
+@using FoodFrontend.Code.Services
+@using FoodFrontend.Components
+@inject PoiQueryService PoiQueryService
+
+<div class="container">
+<h1>Food Place</h1>
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="search/">Search</a></li>
+        <li><a href="places/@FsaId/">Food: @FsaId</a></li>
+        <li>Review</li>
+    </ul>
+</nav>
+
+@if (CurrentPoi is not null) {
+    <hgroup>
+        <h2>@CurrentPoi.Name</h2>
+        <p>@CurrentPoi.Cuisine</p>
+    </hgroup>
+    @if (_submitted is null) {
+        <form @onsubmit="FormSubmit" action="javascript:void(0);">
+            <label>
+                Your Review
+                <input type="range" @bind-value="@_currentRating" min="1" max="5" />
+            </label>
+            <input type="submit"/>
+        </form>
+    }
+    else
+    {
+        <StarRating Rating="@_currentRating"/>
+        <p>Send an email with your text review to save it!</p>
+        <div role="group">
+            <a role="button" href="ms-outlook://compose?to=cibusnu@mholloway.co.uk&subject=@_submitted"
+               class="pico-background-azure-500">
+                <Icon Name="brand-teams"/>
+                Open in Outlook</a>
+            <a role="button" href="mailto:cibusnu@mholloway.co.uk?subject=@_submitted" class="secondary">
+                <Icon Name="mail"/>
+                Open in Mail App</a>
+        </div>
+        <a role="button" href="">Back to Home</a>
+    }
+}
+else
+{
+    <article><p aria-busy="true">Loading</p></article>
+}
+</div>
+
+@code {
+    [Parameter]
+    public required string FsaId { get; set; }
+    
+    Poi? CurrentPoi { get; set; }
+
+    int _currentRating { get; set; } = 4;
+    string? _submitted = null;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrentPoi = await PoiQueryService.QuerySpecificPoi(FsaId);
+    }
+
+    private async Task FormSubmit()
+    {
+        ReviewRequestResponse r = await PoiQueryService.CreateReviewRequest(FsaId, _currentRating, FsaId);
+        _submitted = r.Uuid;
+    }
+
+}

@@ -1,0 +1,15 @@
+<!-- https://tabler-icons.io -->
+<i class="ti ti-@(Name) @Class"></i>
+
+<style>
+.ti {
+    height: 1em !important;
+}
+</style>
+
+
+@code {
+    [Parameter] public string Name { get; set; } = null!;
+
+    [Parameter] public string? Class { get; set; }
+}

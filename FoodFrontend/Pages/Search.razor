@@ -1,0 +1,57 @@
+@page "/search"
+@using FoodFrontend.Code.Model
+@using FoodFrontend.Components
+
+<div class="container">
+    <h1>Search</h1>
+    <nav aria-label="breadcrumb">
+        <ul>
+            <li><a href="">Home</a></li>
+            <li>Search</li>
+        </ul>
+    </nav>
+    <form action="javascript:void(0);">
+        <div role="group">
+            <InputText @ref="_inputTextForFocus"
+                       type="search"
+                       name="search"
+                       placeholder="Search"
+                       aria-label="Search"
+                       @bind-Value="@_query"
+                       @bind-Value:after="@InputEvent"/>
+            <button><Icon Name="search"/></button>
+        </div>
+    </form>
+    <hr/>
+    <table>
+        @foreach (LitePoi result in _results)
+        {
+            <tr>
+                <th>
+                    <hgroup>
+                        <strong>@result.Name</strong>
+                        <p>@Math.Round(result.Coordinate.DistanceTo(new(-0.565917, 51.425869)), 1)km from campus</p>
+                    </hgroup>
+                </th>
+                <td>
+                    <a href="places/@result.FoodSafetyAgencyId" role="button">Open</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@code {
+    private InputText _inputTextForFocus;
+
+    string _query { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && _inputTextForFocus?.Element != null)
+        {
+            await _inputTextForFocus.Element.Value.FocusAsync();
+        }
+    }
+
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"></meta>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"></meta>
+    <title>FoodFrontend</title>
+    <base href="/" />
+
+    <!-- stylesheets -->
+    <link href="FoodFrontend.styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link href="lib/picocss/pico/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/tabler/icons-webfont/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="lib/picocss/pico/css/pico.colors.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    
+    <!-- manifests -->
+    <link href="manifest.webmanifest" rel="manifest" />
+    
+    <!-- openlayers -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/8.1.0/ol.min.css" rel="stylesheet" />
+    <!--suppress HtmlUnknownTarget -->
+    <link href="_content/OpenLayers.Blazor/OpenLayers.Blazor.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/8.1.0/dist/ol.min.js"></script>
+
+</head>
+
+<body>
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="." class="reload">Reload</a>
+        <span class="dismiss">🗙</span>
+    </div>
+    
+    <!--suppress HtmlUnknownTarget -->
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+</body>
+
+</html>

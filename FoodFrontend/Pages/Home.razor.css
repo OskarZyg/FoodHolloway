@@ -1,0 +1,50 @@
+.map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.overlay {
+    position: fixed;
+    left: 0;
+    right:0;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+header.overlay {
+    top: calc(0.5em + var(--sat));
+}
+
+footer.overlay {
+    bottom: calc(0.5em + var(--sab));
+}
+
+.overlay > div {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+@keyframes fadeUpBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-8px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up {
+    animation: fadeUpBounce 200ms ease-out forwards;
+}

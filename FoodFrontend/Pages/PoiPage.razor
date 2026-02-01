@@ -1,0 +1,83 @@
+@page "/places/{FsaId}"
+@using FoodFrontend.Code.Model
+@using FoodFrontend.Code.Services
+@using FoodFrontend.Components
+@inject PoiQueryService PoiQueryService
+
+<div class="container">
+<h1>Food Place</h1>
+<nav aria-label="breadcrumb">
+    <ul>
+        <li><a href="">Home</a></li>
+        <li><a href="search/">Search</a></li>
+        <li>Food Place</li>
+    </ul>
+</nav>
+
+@if (CurrentPoi is not null) {
+    <hgroup>
+        <h2>@CurrentPoi.Name</h2>
+        <p>@CurrentPoi.Cuisine</p>
+    </hgroup>
+    <div>
+        @if (CurrentPoi.StarRating is not null)
+        {
+            <div>
+                <StarRating Rating="@CurrentPoi.StarRating.Value"/>
+            </div>
+        }
+        else
+        {
+            <div>
+                <StarRating Rating="0"/>
+                <em>No Reviews</em>
+            </div>
+        }
+    
+        <a role="button" href="/places/@FsaId/review">Add Review</a>
+    </div>
+    
+    @if (CurrentPoi.OpeningHours is not null)
+    {
+        <table>
+            @foreach (var se in CurrentPoi.OpeningHours.Split(";"))
+            {
+                <tr>
+                    <th>@se.TrimStart().Split(' ')[0]</th>
+                    <td>@se.Split(' ').Last()</td>
+                </tr>
+            }
+        </table>
+    }
+    
+    <p>@CurrentPoi.Description</p>
+    
+    <ul>
+        @if (CurrentPoi.Vegan == true)
+        {
+            <li>Vegetarian options available</li>
+        }
+        @if (CurrentPoi.Vegan == true)
+        {
+            <li>Vegan options available</li>
+        }
+    </ul>
+}
+else
+{
+    <article><p aria-busy="true">Loading</p></article>
+}
+</div>
+
+@code {
+    [Parameter]
+    public required string FsaId { get; set; }
+    
+    Poi? CurrentPoi { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        CurrentPoi = await PoiQueryService.QuerySpecificPoi(FsaId);
+    }
+
+}

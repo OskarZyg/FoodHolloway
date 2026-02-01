@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "foodbackend"
+version = "0.1.0"
+description = ""
+authors = ["Oskar Zygmunt <56176746+OskarZyg@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pyrosm = "^0.6.2"
+matplotlib = "^3.10.8"
+fastapi = {extras = ["standard"], version = "^0.128.0"}
+google-genai = "==1.61.0"
+imapclient = "^3.1.0"
+apscheduler = "^3.11.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
